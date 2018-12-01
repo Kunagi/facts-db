@@ -1,0 +1,2 @@
+{:watch-dirs ["src"]
+ :open-file-command "emacsclient"}

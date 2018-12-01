@@ -1,0 +1,3 @@
+#!/bin/bash -e
+
+clojure --main figwheel.main --build dev

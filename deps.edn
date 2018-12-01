@@ -1,0 +1,3 @@
+{:deps {witek/bindscript {:local/root "/p/bindscript"}}
+
+ :paths ["src" "target"]}
