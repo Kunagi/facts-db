@@ -1,2 +1,2 @@
-{:watch-dirs ["src"]
+{:watch-dirs ["src" "/p/bindscript/src"]
  :open-file-command "emacsclient"}
