@@ -20,10 +20,8 @@
 
 (defn- resolve-references
   [e refs db]
-  #?(:cljs (.log js/console "!!! resolve" e refs))
   (reduce
    (fn [e [ref-key sub-refs]]
-     #?(:cljs (.log js/console "!!! sub-refs" ref-key sub-refs))
      (if-let [value (get e ref-key)]
        (if (coll? value)
          (assoc e
