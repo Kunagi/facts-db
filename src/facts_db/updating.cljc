@@ -1,9 +1,6 @@
 (ns facts-db.updating
   (:require
-   [clojure.spec.alpha :as s]
-   [bindscript.api :refer [def-bindscript]]
-
-   [facts-db.validating :as validating]))
+   [bindscript.api :refer [def-bindscript]]))
 
 
 (defn new-db

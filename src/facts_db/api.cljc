@@ -3,6 +3,7 @@
    [bindscript.api :refer [def-bindscript]]
 
    [facts-db.validating :as validating]
+   [facts-db.reading :as reading]
    [facts-db.updating :as updating]))
 
 
