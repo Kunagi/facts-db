@@ -8,11 +8,18 @@
   {})
 
 
+(defn new-uuid
+  []
+  (str #?(:cljs (random-uuid)
+          :clj  (java.util.UUID/randomUUID))))
+
+
 (defn update-entity
   "Update a single entity.
   Only provided facts are updated. Existing facts stay unchanged."
   [db new-facts]
   (let [id (:db/id new-facts)
+        id (if id id (new-uuid))
         entity (get db id)
         entity (if entity entity {:db/id id})
         entity (merge entity new-facts)]
