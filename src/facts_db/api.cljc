@@ -4,26 +4,23 @@
 
    [facts-db.validating :as validating]
    [facts-db.reading :as reading]
-   [facts-db.updating :as updating]))
-
-
-
+   [facts-db.updating :as updating]
+   [facts-db.assisted-updating :as assisted-updating]))
 
 ;;;
 
 
 (def new-db updating/new-db)
 
-(def update-entity updating/update-entity)
-
-(def update-entities updating/update-entities)
+(def ++ updating/update-facts)
+(def +++ assisted-updating/add-children)
 
 (def merge-db updating/merge-db)
 
 
-
-(defn pull
-  [db pattern])
+(defn tree
+  [db id refs]
+  (reading/tree db id refs))
 
 
 (def-bindscript ::full-stack

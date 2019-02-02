@@ -1,6 +1,7 @@
 (ns facts-db.reading
   (:require
-   [bindscript.api :refer [def-bindscript]]))
+   [bindscript.api :refer [def-bindscript]]
+   [facts-db.validating :as validating]))
 
 
 (defn entity
@@ -9,7 +10,8 @@
   (if-let [entity (get db id)]
     entity
     (throw (ex-info (str "Entity does not exist: " id)
-                    {:id id}))))
+                    {:id id
+                     :existing (keys db)}))))
 
 
 (defn entities
@@ -39,6 +41,7 @@
 (defn tree
   "Return a single entity by `id`, while resolving references `refs`."
   [db id refs]
+  (validating/validate-db db)
   (-> db
       (entity id)
       (resolve-references refs db)))

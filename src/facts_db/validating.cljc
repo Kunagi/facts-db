@@ -22,7 +22,8 @@
   (if (s/valid? :db/db db)
     db
     (throw (ex-info "Invalid db"
-                    {:db db}))))
+                    {:db db
+                     :spec-explain (s/explain-str :db/db db)}))))
 
 
 (defn validate-entity
