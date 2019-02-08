@@ -14,6 +14,7 @@
 
 (def ++ updating/update-facts)
 (def +++ assisted-updating/add-children)
+(def ++- assisted-updating/remove-children)
 
 (def merge-db updating/merge-db)
 

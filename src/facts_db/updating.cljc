@@ -55,7 +55,7 @@
 
 (defn conform-entities [db entities]
   (if-not (collection? entities)
-    (conform-entities db [entities])
+    (conform-entities db (list entities))
     (map (partial conform-entity db) entities)))
 
 

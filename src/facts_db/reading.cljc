@@ -54,14 +54,19 @@
 
 
 (def-bindscript ::full-stack
-  db          {1 {:name "Homer"
+  db          {:db/config {:db/id :db/config}
+               1 {:db/id 1
+                  :name "Homer"
                   :partner 2
-                  :children [3 4]}
-               2 {:name "Marge"
+                  :children #{3 4}}
+               2 {:db/id 2
+                  :name "Marge"
                   :partner 1
-                  :children [3 4]}
-               3 {:name "Bart"}
-               4 {:name "Lisa"}}
+                  :children #{3 4}}
+               3 {:db/id 3
+                  :name "Bart"}
+               4 {:db/id 4
+                  :name "Lisa"}}
 
   homer        (entity db 1)
   bart+homer   (entities db [3 1])
