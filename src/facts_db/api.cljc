@@ -9,6 +9,11 @@
 
 ;;;
 
+(defn new-uuid
+  []
+  (str #?(:cljs (random-uuid)
+          :clj  (java.util.UUID/randomUUID))))
+
 
 (def new-db updating/new-db)
 
