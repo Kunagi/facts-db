@@ -1,4 +1,4 @@
-(ns facts-db.browserapp
+(ns facts-db.figwheel-adapter
   (:require
    [facts-db.api]))
 
