@@ -36,6 +36,11 @@
   (reading/tree db id refs))
 
 
+(defn trees
+  [db id refs]
+  (reading/trees db id refs))
+
+
 (def-bindscript ::full-stack
   db (new-db)
   db (validating/validate-db db))
