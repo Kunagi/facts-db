@@ -41,10 +41,13 @@
 (defn tree
   "Return a single entity by `id`, while resolving references `refs`."
   [db id refs]
-  (validating/validate-db db)
-  (-> db
-      (entity id)
-      (resolve-references refs db)))
+  (if-not db
+    nil
+    (do
+      (validating/validate-db db)
+      (-> db
+          (entity id)
+          (resolve-references refs db)))))
 
 
 (defn trees

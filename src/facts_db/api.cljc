@@ -17,8 +17,15 @@
 
 (def new-db updating/new-db)
 
-(def ++ updating/update-facts)
-(def +++ assisted-updating/add-children)
+(defn ++
+  ([db entities]
+   (updating/update-facts db entities))
+  ([db paths childs]
+   (assisted-updating/add-children-multiple db paths childs))
+  ([db parent-entity-id parent-entity-reference-fact childs]
+   (assisted-updating/add-children db parent-entity-id parent-entity-reference-fact childs)))
+
+
 (def ++- assisted-updating/remove-children)
 
 (def merge-db updating/merge-db)
