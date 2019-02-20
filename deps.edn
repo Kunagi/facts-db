@@ -5,9 +5,11 @@
                               com.bhauman/rebel-readline-cljs {:mvn/version "RELEASE"}},
                  :extra-paths ["target"
                                "../bindscript/src"
-                               "../browser-headsup/src"],
+                               "../browser-headsup/src"
+                               "../conform/src"],
                  :main-opts ["--main" "figwheel.main" "--build" "dev"]}},
- :deps {org.clojure/clojure {:mvn/version "1.10.0"},
+ :deps {kunagi/conform {:local/root "../conform"},
+        org.clojure/clojure {:mvn/version "1.10.0"},
         witek/bindscript {:local/root "../bindscript"}},
  :paths ["src"]}
 

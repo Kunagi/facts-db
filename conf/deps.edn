@@ -1,3 +1,4 @@
-{:own [ witek/bindscript]
+{:own [witek/bindscript
+       kunagi/conform]
 
  :foreign {}}
