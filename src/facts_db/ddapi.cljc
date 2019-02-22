@@ -16,17 +16,20 @@
 
 (s/def ::event-id qualified-keyword?)
 (s/def ::event-args map?)
-(s/def ::event (s/cat :event-id ::event-id :event-args ::event-args))
+(s/def ::event      (s/cat :id    ::event-id
+                           :args  (s/? ::event-args)))
 (s/def ::events (s/coll-of ::event))
 
-(s/def ::query-id qualified-keyword?)
+(s/def ::query-id   qualified-keyword?)
 (s/def ::query-args map?)
+(s/def ::query      (s/cat :id    ::query-id
+                           :args  (s/? ::query-args)))
 
 (s/def ::api-definition (s/keys))
 
-(s/def ::event-definition (s/keys))
+(s/def ::event-handler fn?)
 
-(s/def ::query-definition (s/keys))
+(s/def ::query-handler fn?)
 
 
 ;;;
@@ -54,12 +57,13 @@
 
 
 (defn <query
-  [db query-id args]
+  [db query]
   (validate ::<query
-            [:map  db       ::db
-             :val  query-id ::query-id
-             :args args     ::query-args])
-  (run-query db query-id args))
+            [:map  db    ::db
+             :val  query ::query])
+  (let [[query-id query-args] query
+        query-args (or query-args {})]
+    (run-query db query-id query-args)))
 
 
 (defn new-db
@@ -98,26 +102,28 @@
 
 
 (defn def-event
-  [event-id & {:as event :keys [handler]}]
+  [event-id event-handler]
   (validate ::def-event
             [:val event-id ::event-id]
-            [:val event ::event-definition])
-  (let [event (assoc event :id event-id)
+            [:val event-handler ::event-handler])
+  (let [event {:id event-id
+               :handler event-handler}
         api-id (keyword (namespace event-id))]
     (defmethod apply-event event-id [db event-id args]
-      (handler db args))
+      (event-handler db args))
     (swap! !apis assoc-in [api-id :events event-id] event)))
 
 
 (defn def-query
-  [query-id & {:as query :keys [handler]}]
+  [query-id query-handler]
   (validate ::def-query
             [:val query-id ::query-id]
-            [:val query ::query-definition])
-  (let [query (assoc query :id query-id)
+            [:val query-handler ::query-handler])
+  (let [query {:id query-id
+               :handler query-handler}
         api-id (keyword (namespace query-id))]
     (defmethod run-query query-id [db query-id args]
-      (handler db args))
+      (query-handler db args))
     (swap! !apis assoc-in [api-id :queries query-id] query)))
 
 

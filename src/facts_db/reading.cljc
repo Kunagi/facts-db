@@ -4,8 +4,13 @@
    [facts-db.validating :as validating]))
 
 
+(defn contains-entity?
+  [db id]
+  (boolean (get db id)))
+
+
 (defn entity
-  "Return a single entity by `id`."
+  "Return a single entity by `id`. Throw an exception if entity is missing."
   [db id]
   (if-let [entity (get db id)]
     entity
@@ -18,6 +23,13 @@
   "Return a collection of entities by `id`."
   [db ids]
   (map (partial entity db) ids))
+
+
+(defn fact
+  [db entity-id fact-name]
+  (-> db
+      (entity entity-id)
+      (get fact-name)))
 
 
 (defn- resolve-references

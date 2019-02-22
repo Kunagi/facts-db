@@ -26,14 +26,31 @@
    (assisted-updating/add-children db parent-entity-id parent-entity-reference-fact childs)))
 
 
+
 (def ++- assisted-updating/remove-children)
 
 (def merge-db updating/merge-db)
 
 
+(defn contains-entity?
+  [db id]
+  (reading/contains-entity? db id))
+
+
+(defn fact
+  [db entity-id fact-name]
+  (reading/fact db entity-id fact-name))
+
+
 (defn tree
   [db id refs]
   (reading/tree db id refs))
+
+
+(defn tree-or-nil
+  [db id refs]
+  (if (reading/contains-entity? db id)
+    (tree db id refs)))
 
 
 (defn trees
