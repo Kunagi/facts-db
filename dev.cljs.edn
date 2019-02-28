@@ -1,6 +1,4 @@
-^{:launch-js ["google-chrome" :open-url],
- :open-file-command "emacsclient",
- :watch-dirs ["src"
+^{:watch-dirs ["src"
               "../bindscript/src"
               "../browser-headsup/src"
               "../conform/src"]}
