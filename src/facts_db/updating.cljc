@@ -1,7 +1,8 @@
 (ns facts-db.updating
   (:require
    [bindscript.api :refer [def-bindscript]]
-   [facts-db.validating :as validating]))
+   [facts-db.validating :as validating]
+   [clojure.set :as set]))
 
 
 (defn new-db
@@ -15,11 +16,46 @@
           :clj  (java.util.UUID/randomUUID))))
 
 
+(defn- update-entity-fact
+  [entity [k v]]
+  (let [k-name (name k)]
+    (cond
+
+      (.endsWith k-name "+1")
+      (let [k (keyword (namespace k) (.substring k-name 0 (.indexOf k-name "+1")))]
+        (update entity k conj v))
+
+      (.endsWith k-name "+n")
+      (let [k (keyword (namespace k) (.substring k-name 0 (.indexOf k-name "+n")))]
+        (update entity k into v))
+
+      (.endsWith k-name "-1")
+      (let [k (keyword (namespace k) (.substring k-name 0 (.indexOf k-name "-1")))]
+        (update entity k disj v))
+
+      (.endsWith k-name "-n")
+      (let [k (keyword (namespace k) (.substring k-name 0 (.indexOf k-name "-n")))]
+        (update entity k set/difference v))
+
+      :else
+      (assoc entity k v))))
+
+
+
+(def-bindscript ::update-entity-fact
+  e {:db/id 1
+     :colors #{:red}}
+  e (update-entity-fact e [:colors+1 :green])
+  e (update-entity-fact e [:colors+n [:blue :yellow]])
+  e (update-entity-fact e [:colors-1 :green])
+  e (update-entity-fact e [:colors-n [:blue :yellow]]))
+
+
 (defn- update-entity-
   [db new-facts]
   (let [id (:db/id new-facts)
-        entity (get db id)
-        entity (merge (if entity entity {:db/id id}) new-facts)]
+        entity (or (get db id) {:db/id id})
+        entity (reduce update-entity-fact entity new-facts)]
     (assoc db id entity)))
 
 
@@ -80,6 +116,7 @@
   :spec :db/db
   witek (get db 1)
   :spec #(= {:db/id 1 :name "Witek"} %)
+
   ;; db    {1 {:db/id 1
   ;;           :name "Witek"}
   ;;        2 {:db/id 2

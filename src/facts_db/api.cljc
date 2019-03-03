@@ -26,15 +26,6 @@
    (assisted-updating/add-children db parent-entity-id parent-entity-reference-fact childs)))
 
 
-(def-bindscript ::artjom
-  a 1
-  db (new-db)
-  db (++ db {:vorname "artjom"
-             :friends #{}
-             :db/id :artjom})
-  db (++ db :artjom :friends {:vorname "witek"}))
-
-
 (def ++- assisted-updating/remove-children)
 
 (def merge-db updating/merge-db)
@@ -68,4 +59,16 @@
 
 (def-bindscript ::full-stack
   db (new-db)
-  db (validating/validate-db db))
+
+  db (++ db {:db/id "w"
+             :name "Witek"
+             :colors #{:red}})
+
+  db (++ db {:db/id "w"
+             :colors+1 :green})
+
+  _  (fact db "w" :colors))
+
+
+  ;; db (++ db {:db/id "k"
+  ;;            :name "Kacper"}))
