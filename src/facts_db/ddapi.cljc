@@ -13,8 +13,9 @@
 
 
 (s/def ::api-id simple-keyword?)
+(s/def ::event-def-id qualified-keyword?)
 
-(s/def ::event-id qualified-keyword?)
+(s/def ::event-id simple-keyword?)
 (s/def ::event-args map?)
 (s/def ::event      (s/cat :id    ::event-id
                            :args  (s/? ::event-args)))
@@ -50,8 +51,10 @@
             [:map db ::db]
             [:val events ::events])
   (reduce
-   (fn [db [event-id args]]
-     (apply-event db event-id args))
+   (fn [db [event-name args]]
+     (let [api-id (get-in db [:db/config :db/api])
+           event-id (keyword (name api-id) event-name)]
+       (apply-event db event-id args)))
    db
    events))
 
@@ -90,6 +93,9 @@
         true
         (assoc-in [:db/config ::identifier] ::identifier)
 
+        true
+        (assoc-in [:db/config :db/api] api-id)
+
         db-constructor
         (db-constructor args)
 
@@ -104,7 +110,7 @@
 (defn def-event
   [event-id event-handler]
   (validate ::def-event
-            [:val event-id ::event-id]
+            [:val event-id ::event-def-id]
             [:val event-handler ::event-handler])
   (let [event {:id event-id
                :handler event-handler}

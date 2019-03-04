@@ -20,6 +20,8 @@
 
 (def upd updating2/update-facts)
 
+
+;; TODO deprecated
 (defn ++
   ([db entities]
    (updating/update-facts db entities))
@@ -29,6 +31,7 @@
    (assisted-updating/add-children db parent-entity-id parent-entity-reference-fact childs)))
 
 
+;; TODO deprecated
 (def ++- assisted-updating/remove-children)
 
 (def merge-db updating/merge-db)
