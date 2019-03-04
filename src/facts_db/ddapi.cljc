@@ -3,7 +3,7 @@
    [clojure.spec.alpha :as s]
 
    [conform.api :refer [validate]]
-   [facts-db.api :as db]))
+   [facts-db.updating2 :as db-updating2]))
 
 
 ;;; spec
@@ -56,8 +56,9 @@
   (reduce
    (fn [db [event-name args]]
      (let [api-ns (get-in db [:db/config :db/api-ns])
-           event-id (keyword (name api-ns) event-name)]
-       (apply-event db event-id args)))
+           event-id (keyword (name api-ns) event-name)
+           change-request (apply-event db event-id args)]
+       (db-updating2/update-facts db change-request)))
    db
    events))
 
@@ -97,7 +98,7 @@
         api (assoc api :id api-id
                        :ns api-ns)]
     (defmethod create-db api-id [api args]
-      (cond-> (db/new-db)
+      (cond-> (db-updating2/new-db)
 
         true
         (assoc-in [:db/config ::identifier] ::identifier)
