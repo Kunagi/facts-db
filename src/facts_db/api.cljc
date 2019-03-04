@@ -5,6 +5,7 @@
    [facts-db.validating :as validating]
    [facts-db.reading :as reading]
    [facts-db.updating :as updating]
+   [facts-db.updating2 :as updating2]
    [facts-db.assisted-updating :as assisted-updating]))
 
 ;;;
@@ -16,6 +17,8 @@
 
 
 (def new-db updating/new-db)
+
+(def upd updating2/update-facts)
 
 (defn ++
   ([db entities]

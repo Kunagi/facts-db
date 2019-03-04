@@ -20,7 +20,7 @@
                                :childs childs})))
 
           single-child? (not (updating/collection? childs))
-          childs (updating/conform-entities db childs)
+          childs (updating/conform-cr db childs)
           childs-ids (map :db/id childs)
 
           reference-value (get parent-entity parent-entity-reference-fact)
