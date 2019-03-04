@@ -107,7 +107,7 @@
         (assoc-in [:db/config :db/api-ns] api-ns)
 
         db-constructor
-        (db-constructor args)
+        (db-updating2/update-facts (db-constructor args))
 
         true
         (assoc-in [:db/config :events>] events>)
