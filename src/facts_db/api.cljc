@@ -18,7 +18,7 @@
 
 (def new-db updating/new-db)
 
-(def upd updating2/update-facts)
+(def update-facts updating2/update-facts)
 
 
 ;; TODO deprecated

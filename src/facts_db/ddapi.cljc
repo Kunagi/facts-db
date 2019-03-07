@@ -107,13 +107,13 @@
         (assoc-in [:db/config :db/api-ns] api-ns)
 
         db-constructor
-        (db-updating2/update-facts (db-constructor args))
+        (db-updating2/update-facts (db-constructor args))))
 
-        true
-        (assoc-in [:db/config :events>] events>)
+        ;; true
+        ;; (assoc-in [:db/config :events>] events>)
 
-        true
-        (assoc-in [:db/config :<query] <query)))
+        ;; true
+        ;; (assoc-in [:db/config :<query] <query)))
     (swap! !apis assoc api-id api)
     (swap! !api-ns->api-id assoc api-ns api-id)))
 
