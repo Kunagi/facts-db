@@ -3,7 +3,8 @@
    [clojure.spec.alpha :as s]
    [bindscript.api :refer [def-bindscript]]
    [conform.api :as conform]
-   [clojure.set :as set]))
+   [clojure.set :as set]
+   [facts-db.validating]))
 
 (s/def ::fact-key keyword?)
 

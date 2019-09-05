@@ -50,20 +50,21 @@
 
 (defn events>
   [db events]
-  (validate ::events>
-            [:map db ::db]
-            [:val events ::events])
-  (reduce
-   (fn [db [event-name args]]
-     (let [api-ns (get-in db [:db/config :db/api-ns])
-           event-id (keyword (name api-ns)
-                             (if (keyword? event-name)
-                               (name event-name)
-                               event-name))
-           change-request (apply-event db event-id args)]
-       (db-updating2/update-facts db change-request)))
-   db
-   events))
+  (let [events (remove nil? events)]
+    (validate ::events>
+              [:map db ::db]
+              [:val events ::events])
+    (reduce
+     (fn [db [event-name args]]
+       (let [api-ns (get-in db [:db/config :db/api-ns])
+             event-id (keyword (name api-ns)
+                               (if (keyword? event-name)
+                                 (name event-name)
+                                 event-name))
+             change-request (apply-event db event-id args)]
+         (db-updating2/update-facts db change-request)))
+     db
+     events)))
 
 
 (defn <query
