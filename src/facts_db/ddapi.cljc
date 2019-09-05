@@ -56,7 +56,10 @@
   (reduce
    (fn [db [event-name args]]
      (let [api-ns (get-in db [:db/config :db/api-ns])
-           event-id (keyword (name api-ns) event-name)
+           event-id (keyword (name api-ns)
+                             (if (keyword? event-name)
+                               (name event-name)
+                               event-name))
            change-request (apply-event db event-id args)]
        (db-updating2/update-facts db change-request)))
    db
