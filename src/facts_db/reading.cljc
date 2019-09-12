@@ -12,11 +12,11 @@
 (defn entity
   "Return a single entity by `id`. Throw an exception if entity is missing."
   [db id]
-  (if-let [entity (get db id)]
-    entity
-    (throw (ex-info (str "Entity does not exist: " id)
-                    {:id id
-                     :existing (keys db)}))))
+  (when id
+    (if-let [entity (get db id)]
+      entity
+      {:db/id id
+       :db/entity-missing true})))
 
 
 (defn entities
