@@ -4,9 +4,8 @@
 
    [facts-db.validating :as validating]
    [facts-db.reading :as reading]
-   [facts-db.updating :as updating]
-   [facts-db.updating2 :as updating2]
-   [facts-db.assisted-updating :as assisted-updating]))
+   [facts-db.updating2 :as updating]
+   [facts-db.ddapi :as ddapi]))
 
 ;;;
 
@@ -16,25 +15,29 @@
           :clj  (java.util.UUID/randomUUID))))
 
 
-(def new-db updating/new-db)
-
-(def update-facts updating2/update-facts)
-
-
-;; TODO deprecated
-(defn ++
-  ([db entities]
-   (updating/update-facts db entities))
-  ([db paths childs]
-   (assisted-updating/add-children-multiple db paths childs))
-  ([db parent-entity-id parent-entity-reference-fact childs]
-   (assisted-updating/add-children db parent-entity-id parent-entity-reference-fact childs)))
-
-
-;; TODO deprecated
-(def ++- assisted-updating/remove-children)
+(def update-facts updating/update-facts)
 
 (def merge-db updating/merge-db)
+
+(defn query [db query]
+  (ddapi/<query db query))
+
+(def apply-events ddapi/events>)
+
+(def def-api ddapi/def-api)
+
+(def def-event ddapi/def-event)
+
+(def def-query ddapi/def-query)
+
+
+(defn new-db
+  ([]
+   (updating/new-db))
+  ([api-ident]
+   (ddapi/new-db api-ident {}))
+  ([api-ident args]
+   (ddapi/new-db api-ident args)))
 
 
 (defn contains-entity?
@@ -63,18 +66,3 @@
   (reading/trees db id refs))
 
 
-(def-bindscript ::full-stack
-  db (new-db)
-
-  db (++ db {:db/id "w"
-             :name "Witek"
-             :colors #{:red}})
-
-  db (++ db {:db/id "w"
-             :colors+1 :green})
-
-  _  (fact db "w" :colors))
-
-
-  ;; db (++ db {:db/id "k"
-  ;;            :name "Kacper"}))

@@ -218,3 +218,10 @@
                        :db/delete true}))
 
   ;;db (update-facts db :x))
+
+
+
+(defn merge-db
+  "Merge facts from `db2` into `db`."
+  [db db2]
+  (update-facts db (vals db2)))

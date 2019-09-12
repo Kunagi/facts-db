@@ -25,9 +25,8 @@
 (s/def ::events (s/coll-of ::event))
 
 (s/def ::query-id   simple-keyword?)
-(s/def ::query-args map?)
-(s/def ::query      (s/cat :id    ::query-id
-                           :args  (s/? ::query-args)))
+(s/def ::query-arg any?)
+(s/def ::query (s/cat ::query-id (s/* ::query-arg)))
 
 (s/def ::api-definition (s/keys))
 
@@ -72,10 +71,12 @@
   (validate ::<query
             [:map  db    ::db
              :val  query ::query])
-  (let [[query-name query-args] query
+  (let [[query-name & query-args] query
         api-ns (get-in db [:db/config :db/api-ns])
-        query-id (keyword (name api-ns) query-name)
-        query-args (or query-args {})]
+        query-id (keyword (name api-ns)
+                          (if (keyword? query-name)
+                            (name query-name)
+                            query-name))]
     (run-query db query-id query-args)))
 
 
@@ -148,11 +149,11 @@
                :handler query-handler}
         api-ns (keyword (namespace query-id))
         api-id (@!api-ns->api-id api-ns)]
-      (when-not api-id (throw (ex-info (str "No API for namespace " api-ns)
-                                       {:missing-ns api-ns
-                                        :available-nss (keys @!api-ns->api-id)})))
+    (when-not api-id (throw (ex-info (str "No API for namespace " api-ns)
+                                     {:missing-ns api-ns
+                                      :available-nss (keys @!api-ns->api-id)})))
     (defmethod run-query query-id [db query-id args]
-      (query-handler db args))
+      (apply query-handler (into [db] args)))
     (swap! !apis assoc-in [api-id :queries query-id] query)))
 
 
