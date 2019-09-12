@@ -1,1 +1,0 @@
-(ns facts-db.events)
