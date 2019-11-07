@@ -62,7 +62,28 @@
 
 
 (defn trees
-  [db id refs]
-  (reading/trees db id refs))
+  [db ids refs]
+  (reading/trees db ids refs))
 
 
+(defn find-ids
+  [db predicate]
+  (reading/find-ids db predicate))
+
+
+(defn find-id
+  [db predicate]
+  (reading/find-id db predicate))
+
+
+(defn id-by-kv
+  [db k v]
+  (find-id db #(= v (get % k))))
+
+
+;; (defn pull-one
+;;   [db id-or-predicate pull-template]
+;;   (when id-or-predicate
+;;     (if (fn? id-or-predicate)
+;;       (pull-one (find-id db id-or-predicate))
+;;       (reading/tree db id-or-predicate pull-template))))

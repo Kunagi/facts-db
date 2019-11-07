@@ -68,6 +68,19 @@
   (map #(tree db % refs) ids))
 
 
+(defn find-ids
+  [db predicate]
+  (map
+   #(when (predicate %) (:db/id %))
+   (vals db)))
+
+
+(defn find-id
+  [db predicate]
+  (first (find-ids db predicate)))
+
+
+
 (def-bindscript ::full-stack
   db          {:db/config {:db/id :db/config}
                1 {:db/id 1
@@ -89,5 +102,7 @@
   homer        (tree db 1 {})
   homer+family (tree db 1 {:partner {} :children {}})
   deep         (tree db 1 {:partner {:partner {}}})
+
+  ;;filtered     (tree db 1 {:children {:db/filter #(= 3 (:db/id %))}})
 
   all          (trees db [1 2 3 4] {:partner {} :children {}}))
